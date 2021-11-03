@@ -14,8 +14,7 @@ import static com.googlecode.lanterna.input.KeyType.ArrowUp;
 public class Game {
 
     private Screen screen;
-    private int x = 10;
-    private int y = 10;
+    private Hero hero;
     public Game() {
         try {
             TerminalSize terminalSize = new TerminalSize(40, 20);
@@ -28,6 +27,8 @@ public class Game {
             screen.setCursorPosition(null); // we don't need a cursor
             screen.startScreen(); // screens must be started
             screen.doResizeIfNecessary(); // resize screen if necessary
+
+            hero = new Hero(10, 10);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -51,17 +52,16 @@ public class Game {
 
     private void processKey(KeyStroke key){
         switch (key.getKeyType()){
-            case ArrowUp : y --; break;
-            case ArrowDown : y ++; break;
-            case ArrowLeft: x--; break;
-            case ArrowRight: x++; break;
+            case ArrowUp : hero.moveUp(); break;
+            case ArrowDown : hero.moveDown(); break;
+            case ArrowLeft: hero.moveLeft(); break;
+            case ArrowRight: hero.moveRight(); break;
         }
     }
 
     private void draw() throws IOException {
         screen.clear();
-        screen.setCharacter(x, y, TextCharacter.fromCharacter('X')
-                [0]);
+        hero.draw(screen);
         screen.refresh();
     }
 }
