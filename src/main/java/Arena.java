@@ -19,7 +19,7 @@ public class Arena {
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        hero = new Hero(10,10);
+        hero = new Hero(10, 10);
         this.walls = createWalls();
     }
 
@@ -39,6 +39,7 @@ public class Arena {
                 break;
         }
     }
+
     private List<Wall> createWalls() {
         List<Wall> walls = new ArrayList<>();
         for (int c = 0; c < width; c++) {
@@ -53,22 +54,22 @@ public class Arena {
     }
 
     public void draw(TextGraphics graphics) throws IOException {
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
-        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width  , height), ' ');
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#00ff80"));
+        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         hero.draw(graphics);
         for (Wall wall : walls)
             wall.draw(graphics);
     }
+
     private void moveHero(Position position) {
         if (canMoveHero(position))
             hero.setPosition(position);
     }
 
     private boolean canMoveHero(Position position) {
-        if (position.getX() < 1 || position.getX() > width - 2 || position.getY() < 1 || position.getY() > height - 2)
-            return false;
+        for (Wall wall : walls)
+            if (wall.getPosition().equals(position))
+                return false;
         return true;
     }
-
-
 }
