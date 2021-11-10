@@ -17,8 +17,8 @@ public class Game {
 
     private Screen screen;
     private Arena arena;
-    private int width = 40, height = 20 ;
-    public Game() {
+
+    public Game(int width, int height) {
         try {
             TerminalSize terminalSize = new TerminalSize(width, height);
             DefaultTerminalFactory terminalFactory = new
