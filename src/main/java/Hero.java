@@ -35,15 +35,9 @@ public class Hero {
         return new Position(position.getX(), position.getY() + 1);
     }
 
-    public Position moveRight() {
-        return new Position(position.getX() + 1, position.getY());
+    public Position moveRight() {return new Position(position.getX() + 1, position.getY());}
 
-    }
-
-    public Position moveLeft() {
-        return new Position(position.getX() - 1, position.getY());
-
-    }
+    public Position moveLeft() {return new Position(position.getX() - 1, position.getY());}
 
     public void draw( Screen scr) {
         Screen s = scr;
