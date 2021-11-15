@@ -8,9 +8,10 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import org.w3c.dom.Text;
 
 
+
+import java.awt.desktop.SystemSleepEvent;
 import java.io.IOException;
 
 public class Game {
@@ -20,7 +21,7 @@ public class Game {
 
     public Game(int width, int height) {
         try {
-            TerminalSize terminalSize = new TerminalSize(width, height);
+            TerminalSize terminalSize = new TerminalSize(width, height + 3);
             DefaultTerminalFactory terminalFactory = new
                     DefaultTerminalFactory()
                     .setInitialTerminalSize(terminalSize);
@@ -43,8 +44,12 @@ public class Game {
             draw();
             KeyStroke key = screen.readInput();
             processKey(key);
-
-            if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
+            if (arena.gameOver){
+                draw();
+                screen.close();
+                break;
+            }
+            else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
                 screen.close();
             }
             else if (key.getKeyType() == KeyType.EOF){

@@ -7,6 +7,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.Screen;
 
 
+import javax.management.monitor.MonitorSettingException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,16 @@ import java.util.Random;
 public class Arena {
     private int width, height;
     private Hero hero;
+    private Monster monster;
     private List<Wall> walls;
     private List<Coin> coins;
+    public boolean gameOver = false;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
         hero = new Hero(10, 10);
+        monster = new Monster(2,2);
         this.walls = createWalls();
         this.coins = createCoins();
     }
@@ -29,16 +33,16 @@ public class Arena {
     public void processKey(KeyStroke k) {
         switch (k.getKeyType()) {
             case ArrowUp:
-                moveHero(hero.moveUp());
+                moveHero(hero.moveUp()); moveMonster(); verifyMonsterCollisions(hero.getPosition());
                 break;
             case ArrowDown:
-                moveHero(hero.moveDown());
+                moveHero(hero.moveDown()); moveMonster(); verifyMonsterCollisions(hero.getPosition());
                 break;
             case ArrowLeft:
-                moveHero(hero.moveLeft());
+                moveHero(hero.moveLeft()); moveMonster(); verifyMonsterCollisions(hero.getPosition());
                 break;
             case ArrowRight:
-                moveHero(hero.moveRight());
+                moveHero(hero.moveRight()); moveMonster(); verifyMonsterCollisions(hero.getPosition());
                 break;
         }
     }
@@ -75,6 +79,7 @@ public class Arena {
             wall.draw(graphics);
         for (Coin coin : coins)
             coin.draw(graphics);
+        monster.draw(graphics);
         hero.draw(graphics);
     }
 
@@ -84,6 +89,16 @@ public class Arena {
             retrieveCoins();
         }
     }
+    private void moveMonster(){
+        monster.setPosition(new Position(monster.getX(), monster.getY())); // falta implementar o move do 'M' !
+    }
+
+    private void  verifyMonsterCollisions(Position position){
+        if (monster.getPosition().equals(position)) {
+            gameOver = true;
+            System.out.println("YOU DIED !");
+        }
+    }
 
     private boolean canMoveHero(Position position) {
         for (Wall wall : walls)
@@ -91,10 +106,15 @@ public class Arena {
                 return false;
         return true;
     }
-    public void retrieveCoins(){
+    private void retrieveCoins(){
+        if (coins.size() == 0) {
+            gameOver = true;
+            System.out.println("YOU RETRIEVED ALL THE COINS !");
+        }
         for (Coin coin : coins)
             if (hero.getPosition().equals(coin.getPosition())){
                 coins.remove(coin);
+                hero.coins ++;
                 break;
             }
     }
